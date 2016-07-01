@@ -5,8 +5,8 @@ style.define 'longstring', 'string'
 class ElmMode
   new: =>
     @lexer = bundle_load('elm_lexer')
-    -- @api = bundle_load('api')
-    @completers = { 'in_buffer'} -- , 'api'
+    @api = bundle_load('api')
+    @completers = { 'in_buffer', 'api'}
 
   comment_syntax: '--'
 
