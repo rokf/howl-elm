@@ -30,6 +30,7 @@ function concat(node)
 end
 
 local list = {}
+
 lub.search(data, function(node)
   if node.xml == "div" and node.class == "docs-entry" then
     if string.match(node.id, "[a-zA-Z]+") ~= nil then
@@ -47,6 +48,6 @@ end)
 
 local text = 'return ' .. serpent.block(list)
 
-local file = io.open('api.lua', "w")
+local file = io.open(arg[2] or 'api.lua', "w")
 file:write(text)
 file:close()
