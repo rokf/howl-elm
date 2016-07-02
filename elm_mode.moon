@@ -5,10 +5,13 @@ style.define 'longstring', 'string'
 class ElmMode
   new: =>
     @lexer = bundle_load('elm_lexer')
-    @api = bundle_load('api')
-    @completers = { 'in_buffer', 'api'}
+    -- @api = bundle_load('api')
+    @completers = { 'in_buffer', 'elm_completer'} -- 'api'
 
   comment_syntax: '--'
+
+  default_config:
+    complete: 'manual'
 
   auto_pairs: {
     '(': ')'
