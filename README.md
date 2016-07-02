@@ -11,9 +11,11 @@ This bundle provides a language mode for the functional programming language Elm
 3. `:bundle-load elm`
 
 For inteligent completion you will need `elm-oracle` which can be installed via
+
 1. `sudo npm install -g elm-oracle`
 
 #### Adds
 1. Syntax highlighting for `.elm` files
 2. Autocomplete and documentation via static API (Currently disabled)
-3. Inteligent autocomplete with `elm-oracle` (Works) (Have to implement docs showing up)
+3. Inteligent autocomplete with `elm-oracle`
+3. Inteligent documentation with `elm-oracle`
