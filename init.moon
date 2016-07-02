@@ -41,9 +41,8 @@ howl.completion.register name: 'elm_completer', factory: ElmCompleter
 
 local proc
 reactor_handler = () ->
-  print('Launching reactor')
   path = howl.app.editor.buffer.file.parent.path
-  if proc ~= nil
+  if proc == nil
     proc = Process({
       cmd: "elm-reactor"
       working_directory: path
@@ -52,9 +51,11 @@ reactor_handler = () ->
     howl.clipboard.push(combined_url)
     log.info 'elm-reactor active on ' .. combined_url
   else
-    proc.send_signal('KILL')
-    log.info 'elm-reactor stopped'
-    proc = nil
+    proc.send_signal 9
+    proc.wait()
+    if proc.exited
+      log.info 'elm-reactor stopped'
+      proc = nil
 
 command.register({
   name: 'elm-reactor'
