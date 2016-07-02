@@ -51,11 +51,13 @@ reactor_handler = () ->
     howl.clipboard.push(combined_url)
     log.info 'elm-reactor active on ' .. combined_url
   else
-    proc.send_signal 9
-    proc.wait()
+    proc\send_signal 9 -- TODO
+    proc\wait!
     if proc.exited
       log.info 'elm-reactor stopped'
       proc = nil
+    else
+      log.warn 'elm-reactor remains open for some reason'
 
 command.register({
   name: 'elm-reactor'
