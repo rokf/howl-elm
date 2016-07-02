@@ -2,6 +2,7 @@
 json = bundle_load('luna')
 
 import execute from howl.io.Process
+import Process from howl.io
 import config from howl
 import command from howl
 import BufferPopup from howl.ui
@@ -13,10 +14,15 @@ with config
     default: true
     type_of: 'boolean'
   .define
-    name: 'elm-reactor-port'
+    name: 'elm_reactor_port'
     description: 'Which port to use for elm-reactor'
     default: 8000
     type_of: 'number'
+  .define
+    name: 'elm_reactor_address'
+    description: 'The address to use for elm-reactor'
+    default: "localhost"
+    type_of: 'string'
 
 class ElmCompleter
   complete: (context) =>
@@ -33,11 +39,27 @@ class ElmCompleter
 
 howl.completion.register name: 'elm_completer', factory: ElmCompleter
 
+local proc
+reactor_handler = () ->
+  print('Launching reactor')
+  path = howl.app.editor.buffer.file.parent.path
+  if proc ~= nil
+    proc = Process({
+      cmd: "elm-reactor"
+      working_directory: path
+    })
+    combined_url = config.elm_reactor_address .. ':' .. config.elm_reactor_port
+    howl.clipboard.push(combined_url)
+    log.info 'elm-reactor active on ' .. combined_url
+  else
+    proc.send_signal('KILL')
+    log.info 'elm-reactor stopped'
+    proc = nil
+
 command.register({
   name: 'elm-reactor'
   description: 'Launch elm-reactor'
-  handler: () ->
-    print('Launching reactor')
+  handler: reactor_handler
 })
 
 howl.bindings.push({
