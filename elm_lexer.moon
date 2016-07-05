@@ -18,7 +18,7 @@ howl.aux.lpeg_lexer ->
     scan_until eol,
   }
 
-  -- TODO block comment '{- -}'
+  block_comment = c 'comment', '{-' * scan_to('-}')^-1
 
   sq_string = span("'", "'", '\\')
   dq_string = span('"', '"', P'\\')
@@ -59,6 +59,7 @@ howl.aux.lpeg_lexer ->
     string,
     char,
     comment,
+    block_comment,
     operator,
     keyword,
     type,
