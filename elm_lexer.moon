@@ -2,12 +2,12 @@
 howl.aux.lpeg_lexer ->
   c = capture
 
-  keyword = c 'keyword', word {
+  keyword = c 'keyword', word({
    'as', 'alias', 'and', 'case', 'else',
    'exposing',   'if', 'in', 'infixr', 'import',
    'let', 'module', 'not', 'of', 'or',
    'port', 'then', 'type', 'var', 'where'
-  }
+  }) * -#P("'")
 
   bracket_quote_lvl_start = P'[' * Cg(P('=')^0, 'lvl') * '['
   bracket_quote_lvl_end = ']' * match_back('lvl') * ']'
@@ -28,9 +28,7 @@ howl.aux.lpeg_lexer ->
     bracket_quote
   }
 
-  char = c 'char', any {
-    sq_string,
-  }
+  char = c 'char', blank^1 * sq_string
 
   operator = c 'operator', S'&+-*!/%^~=<>;:,.(){}[]|\\'
 
@@ -44,8 +42,9 @@ howl.aux.lpeg_lexer ->
     (float + digit^1) * (S'eE' * P('-')^0 * digit^1)^0
   })
 
-  ident = (alpha + '_')^1 * (alpha + digit + '_')^0
+  ident = (alpha + '_')^1 * (alpha + digit + '_')^0 * P("'")^0
   identifier = c 'identifier', ident
+
   -- constant = c 'constant', upper^1 * any(upper, '_', digit)^0 * any(eol, -#lower)
 
   ws = c 'whitespace', blank^0

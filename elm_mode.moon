@@ -18,13 +18,13 @@ class ElmMode
     '[': ']'
     '{': '}'
     '"': '"'
-    "'": "'"
   }
 
   indentation: {
     more_after: {
       r'[({=]\\s*(--.*|)$' -- hanging operators
       r'\\b(then)\\b\\s*(--.*|)$', -- block starters
+      r'\\b(of)\\b\\s*(--.*|)$',
       -- { '^%s*if%s+', '%s+end$' }
       r'^\\s*else\\b',
     }
