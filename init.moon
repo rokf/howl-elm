@@ -23,6 +23,11 @@ with config
     description: 'The address to use for elm-reactor'
     default: "localhost"
     type_of: 'string'
+  .define
+    name: 'elm_make_main_file'
+    description: 'The main file to use for elm-make'
+    default: 'Main.elm'
+    type_of: 'string'
 
 class ElmCompleter
   complete: (context) =>
@@ -46,6 +51,21 @@ class ElmCompleter
     candidates
 
 howl.completion.register name: 'elm_completer', factory: ElmCompleter
+
+make_handler = () ->
+  print('ran elm-make handler')
+  proj = howl.Project.for_file(howl.app.editor.buffer.file)
+  if proj == nil
+    return
+  make_process = Process({
+    cmd: string.format("elm-make %s --output=elm.js", config.elm_make_main_file)
+    working_directory: proj.root.path
+  })
+command.register({
+  name: 'elm-make'
+  description: 'Run elm-make and generate a JavaScript file'
+  handler: make_handler
+})
 
 local proc
 reactor_handler = () ->
@@ -128,6 +148,7 @@ unload = ->
   howl.completion.unregister 'elm_completer'
   command.unregister 'elm-reactor'
   command.unregister 'elm-doc'
+  command.unregister 'elm-make'
 
 return {
   info:
