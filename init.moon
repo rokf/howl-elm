@@ -49,11 +49,13 @@ howl.completion.register name: 'elm_completer', factory: ElmCompleter
 
 local proc
 reactor_handler = () ->
-  path = howl.app.editor.buffer.file.parent.path
+  proj = howl.Project.for_file(howl.app.editor.buffer.file)
+  if proj == nil
+    return
   if proc == nil
     proc = Process({
       cmd: "elm-reactor"
-      working_directory: path
+      working_directory: proj.root.path
     })
     combined_url = config.elm_reactor_address .. ':' .. config.elm_reactor_port
     howl.clipboard.push(combined_url)
