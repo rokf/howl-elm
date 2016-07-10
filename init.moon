@@ -31,6 +31,8 @@ class ElmCompleter
     title = howl.app.editor.buffer.title
     path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
+    if proj == nil
+      return {}
     file_path = howl.app.editor.buffer.file.path
     path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
     useful = {}
@@ -88,6 +90,8 @@ command.register({
     title = howl.app.editor.buffer.title
     path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
+    if proj == nil
+      return
     file_path = howl.app.editor.buffer.file.path
     path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
     useful = {}
