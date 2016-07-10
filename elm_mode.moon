@@ -12,6 +12,7 @@ class ElmMode
 
   default_config:
     complete: 'manual'
+    -- word_pattern: '[%w%.]+'
 
   auto_pairs: {
     '(': ')'
@@ -25,15 +26,12 @@ class ElmMode
       r'[({=]\\s*(--.*|)$' -- hanging operators
       r'\\b(then)\\b\\s*(--.*|)$', -- block starters
       r'\\b(of)\\b\\s*(--.*|)$',
-      -- { '^%s*if%s+', '%s+end$' }
       r'^\\s*else\\b',
     }
 
     less_for: {
-      -- r'^\\s*end\\b'
       '^%s*}'
       r'^\\s*else\\b'
-      -- r'^\\s*elseif\\b'
       r'^\\s*\\}\\b'
     }
   }

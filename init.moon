@@ -30,7 +30,13 @@ class ElmCompleter
     candidates = {}
     title = howl.app.editor.buffer.title
     path = howl.app.editor.buffer.file.parent.path
-    o1, o2, o3 = execute(string.format("elm-oracle %s %s", title, context.prefix .. context.suffix), working_directory: path)
+    proj = howl.Project.for_file(howl.app.editor.buffer.file)
+    file_path = howl.app.editor.buffer.file.path
+    path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
+    useful = {}
+    for item in string.gmatch(context.prefix, "[%w%.]+")
+      table.insert(useful, item)
+    o1, o2, o3 = execute(string.format("elm-oracle %s %s", path_no_root, useful[#useful]), working_directory: proj.root.path)
     o1_t = json.decode(o1)
     for i,e in pairs(o1_t)
       table.insert(candidates, e.name)
@@ -81,9 +87,14 @@ command.register({
     context = howl.app.editor.current_context
     title = howl.app.editor.buffer.title
     path = howl.app.editor.buffer.file.parent.path
-    o1, o2, o3 = execute(string.format("elm-oracle %s %s", title, context.prefix .. context.suffix), working_directory: path)
+    proj = howl.Project.for_file(howl.app.editor.buffer.file)
+    file_path = howl.app.editor.buffer.file.path
+    path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
+    useful = {}
+    for item in string.gmatch(context.prefix, "[%w%.]+")
+      table.insert(useful, item)
+    o1, o2, o3 = execute(string.format("elm-oracle %s %s", path_no_root, useful[#useful]), working_directory: proj.root.path)
     nodes = json.decode(o1)
-
     if nodes[1] and nodes[1].comment
       buf = howl.Buffer howl.mode.by_name('markdown')
       buf.text = string.format("# %s\n%s\n# %s",nodes[1].signature,nodes[1].comment, nodes[1].fullName)
