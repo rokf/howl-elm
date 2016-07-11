@@ -1,5 +1,6 @@
 
 json = bundle_load('luna')
+requests = require('requests')
 
 import execute from howl.io.Process
 import Process from howl.io
@@ -61,10 +62,66 @@ make_handler = () ->
     cmd: string.format("elm-make %s --output=elm.js", config.elm_make_main_file)
     working_directory: proj.root.path
   })
+
 command.register({
   name: 'elm-make'
   description: 'Run elm-make and generate a JavaScript file'
   handler: make_handler
+})
+
+set_main_handler = () ->
+  proj = howl.Project.for_file(howl.app.editor.buffer.file)
+  if proj == nil
+    print 'Could not find active project, abort.'
+    return
+  file_path = howl.app.editor.buffer.file.path
+  path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
+  config.elm_make_main_file = path_no_root
+  log.info ('Successfully set new main file to ' .. path_no_root)
+
+command.register({
+  name: 'elm-set-main'
+  description: 'Set current file as the main file of the project (config.elm_make_main_file)'
+  handler: set_main_handler
+})
+
+package_input = () -> -- input function
+  items = {}
+  res = requests.get('http://package.elm-lang.org/all-packages')
+  req_data = json.decode(res.text)
+  for i,pack in ipairs req_data
+    table.insert(items, {
+      pack.name
+      pack.summary
+      name: pack.name
+      summary: pack.summary
+    })
+  return howl.interact.select({
+    :items
+    columns: {
+      { header: 'Name' },
+      { header: 'Description'}
+    }
+  })
+
+package_handler = (ln) -> -- returns line table !!!
+  proj = howl.Project.for_file(howl.app.editor.buffer.file)
+  if proj == nil
+    print 'Could not find active project, abort.'
+    return
+  print(ln.selection.name, ln.selection.summary)
+  process = Process({
+    cmd: string.format("elm-package install --yes %s",ln.selection.name)
+    working_directory: proj.root.path
+  })
+  if process.exited
+    log.info (ln.selection.name .. ' should now be installed in ' .. proj.root.path)
+
+command.register({
+  name: 'elm-package'
+  description: 'Install packages'
+  input: package_input
+  handler: package_handler
 })
 
 local proc
@@ -149,6 +206,8 @@ unload = ->
   command.unregister 'elm-reactor'
   command.unregister 'elm-doc'
   command.unregister 'elm-make'
+  command.unregister 'elm-set-main'
+  command.unregister 'elm-package'
 
 return {
   info:
