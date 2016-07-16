@@ -48,7 +48,7 @@ class ElmCompleter
     o1_t = json.decode(o1)
     for i,e in pairs(o1_t)
       table.insert(candidates, e.name)
-    candidates.authoritive = true
+    -- candidates.authoritive = true
     candidates
 
 howl.completion.register name: 'elm_completer', factory: ElmCompleter
@@ -61,7 +61,14 @@ make_handler = () ->
   make_process = Process({
     cmd: string.format("elm-make %s --output=elm.js", config.elm_make_main_file)
     working_directory: proj.root.path
+    read_stdout: true
+    read_stderr: true
   })
+  response_error_text = make_process.stderr\read_all!
+  response_text = make_process.stdout\read_all!
+  buf = howl.Buffer howl.mode.by_name('default')
+  buf.text = string.format("%s\n\n%s", response_error_text, response_text)
+  howl.app.editor\show_popup BufferPopup buf
 
 command.register({
   name: 'elm-make'
