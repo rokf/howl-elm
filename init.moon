@@ -190,7 +190,8 @@ command.register({
     useful = {}
     for item in string.gmatch(context.prefix, "[%w%.]+")
       table.insert(useful, item)
-    o1, o2, o3 = execute(string.format("elm-oracle %s %s", path_no_root, useful[#useful]), working_directory: proj.root.path)
+    full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
+    o1, o2, o3 = execute(full_command, working_directory: proj.root.path)
     nodes = json.decode(o1)
     if nodes[1] and nodes[1].comment
       buf = howl.Buffer howl.mode.by_name('markdown')
