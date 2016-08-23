@@ -29,6 +29,11 @@ with config
     description: 'The main file to use for elm-make'
     default: 'Main.elm'
     type_of: 'string'
+  .define
+    name: 'elm_oracle_path'
+    description: 'Location to elm-oracle, can be the name itself if in PATH'
+    default: 'elm-oracle'
+    type_of: 'string'
 
 class ElmCompleter
   complete: (context) =>
@@ -44,7 +49,9 @@ class ElmCompleter
     useful = {}
     for item in string.gmatch(context.prefix, "[%w%.]+")
       table.insert(useful, item)
-    o1, o2, o3 = execute(string.format("elm-oracle %s %s", path_no_root, useful[#useful]), working_directory: proj.root.path)
+    full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
+    print(full_command)
+    o1, o2, o3 = execute(full_command, working_directory: proj.root.path)
     o1_t = json.decode(o1)
     for i,e in pairs(o1_t)
       table.insert(candidates, e.name)
