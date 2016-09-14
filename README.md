@@ -1,7 +1,7 @@
 
 <img src="http://package.elm-lang.org/assets/logo.png" width="128">
 
-![core version](https://img.shields.io/badge/core-4.0.1-4DC351.svg) ![elm version](https://img.shields.io/badge/elm-0.17.1-EBDB61.svg)
+![elm version](https://img.shields.io/badge/elm-0.17.1-EBDB61.svg)
 
 This bundle provides a language mode for the functional programming language Elm.
 
@@ -9,6 +9,24 @@ This bundle provides a language mode for the functional programming language Elm
 1. `cd ~/.howl/bundles`
 2. `git clone https://github.com/rokf/elm`
 3. `:bundle-load elm`
+
+For the documentation you need to overwrite the binding in your `init` configuration file.
+
+```
+howl.bindings.push {
+  editor = {
+    ctrl_q = function (editor)
+      if howl.app.editor.buffer.mode.name == "elm" then
+        howl.command.run('elm-doc')
+      else
+        howl.command.run('show-doc-at-cursor')
+      end
+    end
+  }
+}
+```
+If you have other bundles which run a custom command to access the docs just do the same, so they wont
+overlap.
 
 For inteligent completion you will need `elm-oracle` which can be installed via
 
