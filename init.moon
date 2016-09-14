@@ -166,15 +166,6 @@ command.register({
   handler: reactor_handler
 })
 
-howl.bindings.push({
-  editor:
-    ctrl_q: (editor) ->
-      if howl.app.editor.buffer.mode.name == "elm"
-        howl.command.run 'elm-doc'
-      else
-        howl.command.run 'show-doc-at-cursor'
-})
-
 command.register({
   name: 'elm-doc'
   description: 'Show documentation for current context'
@@ -191,6 +182,7 @@ command.register({
     for item in string.gmatch(context.prefix, "[%w%.]+")
       table.insert(useful, item)
     full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
+    print(full_command)
     o1, o2, o3 = execute(full_command, working_directory: proj.root.path)
     nodes = json.decode(o1)
     if nodes[1] and nodes[1].comment
