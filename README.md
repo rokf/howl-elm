@@ -3,7 +3,7 @@
 
 ![elm version](https://img.shields.io/badge/elm-0.17.1-EBDB61.svg)
 
-This bundle provides a language mode for the functional programming language Elm.
+This bundle provides a language mode for Elm.
 
 #### Installation
 1. `cd ~/.howl/bundles`
@@ -12,7 +12,7 @@ This bundle provides a language mode for the functional programming language Elm
 
 For the documentation you need to overwrite the binding in your `init` configuration file.
 
-```
+```lua
 howl.bindings.push {
   editor = {
     ctrl_q = function (editor)
@@ -38,8 +38,7 @@ For `elm-package` you need `lua-requests` from `luarocks` because Howl does not 
 
 #### Adds
 1. Syntax highlighting for `.elm` files
-2. Autocomplete and documentation via static API (Currently disabled)
-3. Inteligent autocomplete with `elm-oracle`
+2. Inteligent autocomplete with `elm-oracle`
 3. Inteligent documentation with `elm-oracle`
 4. `elm-make` which compiles your project to `elm.js`
 5. `elm-package` which gives you a list of available packages to select and install

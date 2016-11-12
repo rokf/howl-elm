@@ -1,6 +1,5 @@
-
-json = bundle_load('luna')
-requests = require('requests')
+json = bundle_load "luna"
+requests = require "requests"
 
 import execute from howl.io.Process
 import Process from howl.io
@@ -39,8 +38,7 @@ class ElmCompleter
   complete: (context) =>
     return {} unless config.elm_oracle
     candidates = {}
-    title = howl.app.editor.buffer.title
-    path = howl.app.editor.buffer.file.parent.path
+    -- path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
     if proj == nil
       return {}
@@ -51,7 +49,7 @@ class ElmCompleter
       table.insert(useful, item)
     full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
     print(full_command)
-    o1, o2, o3 = execute(full_command, working_directory: proj.root.path)
+    o1, _, _ = execute(full_command, working_directory: proj.root.path)
     o1_t = json.decode(o1)
     for i,e in pairs(o1_t)
       table.insert(candidates, e.name)
@@ -171,8 +169,7 @@ command.register({
   description: 'Show documentation for current context'
   handler: () ->
     context = howl.app.editor.current_context
-    title = howl.app.editor.buffer.title
-    path = howl.app.editor.buffer.file.parent.path
+    -- path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
     if proj == nil
       return
@@ -183,7 +180,7 @@ command.register({
       table.insert(useful, item)
     full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
     print(full_command)
-    o1, o2, o3 = execute(full_command, working_directory: proj.root.path)
+    o1, _, _ = execute(full_command, working_directory: proj.root.path)
     nodes = json.decode(o1)
     if nodes[1] and nodes[1].comment
       buf = howl.Buffer howl.mode.by_name('markdown')

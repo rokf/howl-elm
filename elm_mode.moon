@@ -4,9 +4,8 @@ style.define 'longstring', 'string'
 
 class ElmMode
   new: =>
-    @lexer = bundle_load('elm_lexer')
-    -- @api = bundle_load('api')
-    @completers = { 'in_buffer', 'elm_completer'} -- 'api'
+    @lexer = bundle_load 'elm_lexer'
+    @completers = {'in_buffer', 'elm_completer'}
 
   comment_syntax: '--'
 
@@ -35,13 +34,3 @@ class ElmMode
       r'^\\s*\\}\\b'
     }
   }
-
-  code_blocks:
-    multiline: {
-      -- { r'\\s+then\\s*$', '^%s*end', 'end' },
-      -- { r'(^\\s*|\\s+)function\\s*\\([^)]*\\)\\s*$', '^%s*end', 'end' },
-      -- { r'^\\s*function\\s+\\w+[_:.\\w]+\\s*\\([^)]*\\)\\s*$', '^%s*end', 'end' },
-      -- { r'^\\s*terra\\s+\\w+[_:.\\w]+\\s*\\([^)]*\\)\\s*$', '^%s*end', 'end' },
-      -- { r'(^\\s*|\\s+)do\\s*$', '^%s*end', 'end' },
-      -- { r'^\\s*repeat\\s*$', '^%s*until', 'until' },
-    }

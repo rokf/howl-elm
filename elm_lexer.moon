@@ -46,8 +46,7 @@ howl.util.lpeg_lexer ->
   identifier = c 'identifier', ident
 
   -- constant = c 'constant', upper^1 * any(upper, '_', digit)^0 * any(eol, -#lower)
-
-  ws = c 'whitespace', blank^0
+  -- ws = c 'whitespace', blank^0
 
   type = c 'type', any {
     upper^1 * (lower + digit)^1
