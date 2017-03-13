@@ -7,8 +7,7 @@ This bundle provides a language mode for Elm.
 
 #### Installation
 1. `cd ~/.howl/bundles`
-2. `git clone https://github.com/rokf/elm`
-3. `:bundle-load elm`
+2. `git clone https://github.com/rokf/howl-elm`
 
 For the documentation you need to overwrite the binding in your `init` configuration file.
 
@@ -25,7 +24,9 @@ howl.bindings.push {
   }
 }
 ```
-If you have other bundles which run a custom command to access the docs just do the same, so they wont
+If you have other bundles which run a
+custom command to access the docs just
+do the same, so they wont
 overlap.
 
 For inteligent completion you will need `elm-oracle` which can be installed via
@@ -38,7 +39,7 @@ For `elm-package` you need `lua-requests` from `luarocks` because Howl does not 
 
 #### Adds
 1. Syntax highlighting for `.elm` files
-2. Inteligent autocomplete with `elm-oracle`
-3. Inteligent documentation with `elm-oracle`
+2. Autocompletion with `elm-oracle`
+3. Docs with `elm-oracle`
 4. `elm-make` which compiles your project to `elm.js`
 5. `elm-package` which gives you a list of available packages to select and install
