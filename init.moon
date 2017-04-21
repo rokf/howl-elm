@@ -37,32 +37,22 @@ with config
 class ElmCompleter
   complete: (context) =>
     return {} unless config.elm_oracle
-    candidates = {}
-    -- path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
-    if proj == nil
-      return {}
+    if proj == nil then return {}
     file_path = howl.app.editor.buffer.file.path
     path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
-    useful = {}
-    for item in string.gmatch(context.prefix, "[%w%.]+")
-      table.insert(useful, item)
+    useful = [item for item in string.gmatch(context.prefix, "[%w%.]+")]
     full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
-    print(full_command)
     o1, _, _ = execute(full_command, working_directory: proj.root.path)
     o1_t = json.decode(o1)
-    for i,e in pairs(o1_t)
-      table.insert(candidates, e.name)
-    -- candidates.authoritive = true
-    candidates
+    return [e.name for e in *o1_t] -- return this
 
 howl.completion.register name: 'elm_completer', factory: ElmCompleter
 
 make_handler = () ->
   print('ran elm-make handler')
   proj = howl.Project.for_file(howl.app.editor.buffer.file)
-  if proj == nil
-    return
+  if proj == nil then return
   make_process = Process({
     cmd: string.format("elm-make %s --output=elm.js", config.elm_make_main_file)
     working_directory: proj.root.path
@@ -98,18 +88,10 @@ command.register({
 })
 
 package_input = () -> -- input function
-  items = {}
   res = requests.get('http://package.elm-lang.org/all-packages')
   req_data = json.decode(res.text)
-  for i,pack in ipairs req_data
-    table.insert(items, {
-      pack.name
-      pack.summary
-      name: pack.name
-      summary: pack.summary
-    })
   return howl.interact.select({
-    :items
+    items: [{name: pack.name, summary: pack.summary, pack.name, pack.summary} for pack in *req_data]
     columns: {
       { header: 'Name' },
       { header: 'Description'}
@@ -126,8 +108,7 @@ package_handler = (ln) -> -- returns line table !!!
     cmd: string.format("elm-package install --yes %s",ln.selection.name)
     working_directory: proj.root.path
   })
-  if process.exited
-    log.info (ln.selection.name .. ' should now be installed in ' .. proj.root.path)
+  if process.exited then log.info(ln.selection.name .. ' should now be installed in ' .. proj.root.path)
 
 command.register({
   name: 'elm-package'
@@ -139,8 +120,7 @@ command.register({
 local proc
 reactor_handler = () ->
   proj = howl.Project.for_file(howl.app.editor.buffer.file)
-  if proj == nil
-    return
+  if proj == nil then return
   if proc == nil
     proc = Process({
       cmd: "elm-reactor"
@@ -169,17 +149,12 @@ command.register({
   description: 'Show documentation for current context'
   handler: () ->
     context = howl.app.editor.current_context
-    -- path = howl.app.editor.buffer.file.parent.path
     proj = howl.Project.for_file(howl.app.editor.buffer.file)
-    if proj == nil
-      return
+    if proj == nil then return
     file_path = howl.app.editor.buffer.file.path
     path_no_root = string.sub(file_path, #proj.root.path + 2, #file_path)
-    useful = {}
-    for item in string.gmatch(context.prefix, "[%w%.]+")
-      table.insert(useful, item)
+    useful = [item for item in string.gmatch(context.prefix, "[%w%.]+")]
     full_command = string.format("%s %s %s", config.elm_oracle_path, path_no_root, useful[#useful])
-    print(full_command)
     o1, _, _ = execute(full_command, working_directory: proj.root.path)
     nodes = json.decode(o1)
     if nodes[1] and nodes[1].comment
@@ -192,8 +167,6 @@ command.register({
       buf.text = "# Error\n" .. nodes[1].error
       howl.app.editor\show_popup BufferPopup buf
       return
-
-    log.info "No documentation found for '#{context.word}'"
 })
 
 mode_reg =
