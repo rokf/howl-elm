@@ -132,7 +132,7 @@ reactor_handler = () ->
   else
     proc\send_signal 9 -- TODO
     proc\wait!
-    if proc.exited
+    if proc.exited -- too soon?
       log.info 'elm-reactor stopped'
       proc = nil
     else

@@ -1,9 +1,6 @@
 
-<img src="http://package.elm-lang.org/assets/logo.png" width="128">
-
-![elm version](https://img.shields.io/badge/elm-0.17.1-EBDB61.svg)
-
-This bundle provides a language mode for Elm.
+<p align="center"><img src="http://package.elm-lang.org/assets/logo.png" width="128"></p>
+<p align="center"><a href="http://elm-lang.org/">Elm</a> bundle for <a href="https://howl.io/">Howl</a></p>
 
 #### Installation
 1. `cd ~/.howl/bundles`
@@ -35,7 +32,7 @@ For inteligent completion you will need `elm-oracle` which can be installed via
 
 For `elm-package` you need `lua-requests` from `luarocks` because Howl does not come with bundled HTTP request support.
 
-1. `luarocks install lua-requests` (**LuaJIT**)
+1. `luarocks install lua-requests` (Howl uses **LuaJIT** so install with **5.1** LuaRocks)
 
 #### Adds
 1. Syntax highlighting for `.elm` files
