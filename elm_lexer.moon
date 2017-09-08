@@ -25,7 +25,7 @@ howl.util.lpeg_lexer ->
 
   float = digit^0 * P'.' * digit^1
 
-  number = capture 'number', any {
+  number = capture 'number', word {
     hexadecimal_number * any('LL', 'll', 'ULL', 'ull')^-1,
     digit^1 * any { 'LL', 'll', 'ULL', 'ull' },
     (float + digit^1) * (S'eE' * P('-')^0 * digit^1)^0

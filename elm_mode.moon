@@ -16,14 +16,7 @@ class ElmMode
 
   indentation: {
     more_after: {
+      r'\\b(let|in|of|then|else)\\b\\s*(.*)$'
       '=%s*(--.*)$'
-      'let%s*(--.*)$'
-      'in%s*(--.*)$'
-      'of%s*(--.*)$'
-      'then%s*(--.*)$'
-      'else%s*(--.*)$'
-    }
-    less_for: {
-      '^%s*}'
     }
   }
