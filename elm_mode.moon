@@ -1,12 +1,9 @@
 class ElmMode
   new: =>
     @lexer = bundle_load 'elm_lexer'
-    @completers = {'elm_completer', 'in_buffer'}
+    @completers = {'in_buffer'}
 
   comment_syntax: '--'
-
-  default_config:
-    complete: 'manual'
 
   auto_pairs:
     '(': ')'
